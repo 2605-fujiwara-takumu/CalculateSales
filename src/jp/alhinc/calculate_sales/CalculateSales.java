@@ -42,10 +42,8 @@ public class CalculateSales {
 
 		// ※ここから集計処理を作成してください。(処理内容2-1、2-2)
 		final String REGEX = "^[0-9]{8}\\.rcd$";
-
 		File[] files = new File(args[0]).listFiles();
 		List<File> rcdFiles = new ArrayList<>();
-
 
 		// 条件（数字8桁.rcd）に一致するファイル情報をリストに追加
 		for(int i = 0; i < files.length; i++) {
@@ -67,12 +65,10 @@ public class CalculateSales {
 				String key;
 				// 各行を1行ずつ読み込む
 				while((key = br.readLine()) != null) {
-
 					String amount = br.readLine();
 
 			        if (amount != null) {
 			        	long fileSale = Long.parseLong(amount);
-
 			        	Long saleAmount = branchSales.get(key) + fileSale;
 
 			        	branchSales.put(key, saleAmount);
@@ -128,7 +124,6 @@ public class CalculateSales {
 
 				branchNames.put(items[0], items[1]);
 				branchSales.put(items[0], 0L);
-
 			}
 
 		} catch(IOException e) {
@@ -146,7 +141,6 @@ public class CalculateSales {
 				}
 			}
 		}
-
 		return true;
 	}
 
@@ -172,7 +166,6 @@ public class CalculateSales {
 				bw.write(key + "," + branchNames.get(key) + "," + branchSales.get(key));
 				bw.newLine();
 			}
-
 		} catch(IOException e) {
 			System.out.println(UNKNOWN_ERROR);
 			return false;
@@ -188,7 +181,6 @@ public class CalculateSales {
 				}
 			}
 		}
-
 
 		return true;
 	}
