@@ -41,17 +41,16 @@ public class CalculateSales {
 		}
 
 		// ※ここから集計処理を作成してください。(処理内容2-1、2-2)
-		final String REGEX = "^[0-9]{8}\\.rcd$";
+		final String regex = "^[0-9]{8}\\.rcd$"; //メソッドの中では変数は小文字のほうがいい
 		File[] files = new File(args[0]).listFiles();
 		List<File> rcdFiles = new ArrayList<>();
 
 		// 条件（数字8桁.rcd）に一致するファイル情報をリストに追加
 		for(int i = 0; i < files.length; i++) {
-			if(files[i].getName().matches(REGEX)) {
+			if(files[i].getName().matches(regex)) { //修正
 				rcdFiles.add(files[i]);
 			}
 		}
-
 		//売上ファイルの情報を支店ごとに格納
 		//同じ支店の売上ファイルが複数ある場合は、金額を加算してから格納
 		BufferedReader br = null;
@@ -62,18 +61,19 @@ public class CalculateSales {
 				FileReader fr = new FileReader(file);
 				br = new BufferedReader(fr);
 
-				String key;
-				// 各行を1行ずつ読み込む
-				while((key = br.readLine()) != null) {
-					String amount = br.readLine();
+				String line; //変数名:lineに変更
+				List<String> lines = new ArrayList<>();
 
-			        if (amount != null) {
-			        	long fileSale = Long.parseLong(amount);
-			        	Long saleAmount = branchSales.get(key) + fileSale;
-
-			        	branchSales.put(key, saleAmount);
-			        }
+				 //１ファイルずつ読んでListに格納する
+				while((line = br.readLine()) != null) {
+					lines.add(line);
 				}
+
+				//Listを使って計算する
+		        long fileSale = Long.parseLong(lines.get(1));
+		        Long saleAmount = branchSales.get(lines.get(0)) + fileSale;
+
+		        branchSales.put(lines.get(0), saleAmount);
 			}catch(IOException e) {
 				System.out.println(UNKNOWN_ERROR);
 				return;
@@ -91,12 +91,10 @@ public class CalculateSales {
 			}
 
 		}
-
 		// 支店別集計ファイル書き込み処理
 		if(!writeFile(args[0], FILE_NAME_BRANCH_OUT, branchNames, branchSales)) {
 			return;
 		}
-
 	}
 
 	/**
@@ -125,7 +123,6 @@ public class CalculateSales {
 				branchNames.put(items[0], items[1]);
 				branchSales.put(items[0], 0L);
 			}
-
 		} catch(IOException e) {
 			System.out.println(UNKNOWN_ERROR);
 			return false;
@@ -181,7 +178,6 @@ public class CalculateSales {
 				}
 			}
 		}
-
 		return true;
 	}
 
