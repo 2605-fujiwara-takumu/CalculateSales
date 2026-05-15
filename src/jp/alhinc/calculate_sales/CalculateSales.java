@@ -62,18 +62,18 @@ public class CalculateSales {
 				br = new BufferedReader(fr);
 
 				String line; //変数名:lineに変更
-				List<String> lines = new ArrayList<>();
+				List<String> fileContents = new ArrayList<>();
 
 				 //１ファイルずつ読んでListに格納する
 				while((line = br.readLine()) != null) {
-					lines.add(line);
+					fileContents.add(line);
 				}
 
 				//Listを使って計算する
-		        long fileSale = Long.parseLong(lines.get(1));
-		        Long saleAmount = branchSales.get(lines.get(0)) + fileSale;
+		        long fileSale = Long.parseLong(fileContents.get(1));
+		        Long saleAmount = branchSales.get(fileContents.get(0)) + fileSale;
 
-		        branchSales.put(lines.get(0), saleAmount);
+		        branchSales.put(fileContents.get(0), saleAmount);
 			}catch(IOException e) {
 				System.out.println(UNKNOWN_ERROR);
 				return;
@@ -156,6 +156,12 @@ public class CalculateSales {
 
 		try {
 			File file = new File(path,fileName);
+			if(!file.exists()) {
+			    //⽀店定義ファイルが存在しない場合、コンソールにエラーメッセージを表⽰します。
+				System.out.println("⽀店定義ファイルが存在しません");
+				return;
+			}
+
 			FileWriter fw = new FileWriter(file);
 			bw = new BufferedWriter(fw);
 
@@ -180,5 +186,6 @@ public class CalculateSales {
 		}
 		return true;
 	}
+
 
 }
