@@ -24,6 +24,9 @@ public class CalculateSales {
 	private static final String UNKNOWN_ERROR = "予期せぬエラーが発生しました";
 	private static final String FILE_NOT_EXIST = "支店定義ファイルが存在しません";
 	private static final String FILE_INVALID_FORMAT = "支店定義ファイルのフォーマットが不正です";
+	private static final String FILE_INVALID_SERIAL_NUMBER = "売上ファイル名が連番になっていません";
+	private static final String FILE_INVALID_TOTAL_AMOUNT = "合計⾦額が10桁を超えました";
+
 
 	/**
 	 * メインメソッド
@@ -67,7 +70,7 @@ public class CalculateSales {
 			int latter = Integer.parseInt(rcdFiles.get(i + 1).getName().substring(0, 8));
 
 			if((latter - former) != 1) {
-				System.out.println("売上ファイル名が連番になっていません。");
+				System.out.println(FILE_INVALID_SERIAL_NUMBER); // 定数定義
 				return;
 			}
 		}
@@ -114,7 +117,7 @@ public class CalculateSales {
 
 		      //売上金額が10桁以下か確認
 		        if(saleAmount >= 10000000000L){
-		        	System.out.println("合計⾦額が10桁を超えました。");
+		        	System.out.println(FILE_INVALID_TOTAL_AMOUNT); //定数定義
 					return;
 		        }
 
@@ -123,9 +126,6 @@ public class CalculateSales {
 			}catch(IOException e) {
 				System.out.println(UNKNOWN_ERROR);
 				return;
-			} catch (Exception e) {
-			    System.out.println(UNKNOWN_ERROR + e);
-			    return;
 			}finally {
 				// ファイルを開いている場合
 				if(br != null) {
@@ -135,9 +135,6 @@ public class CalculateSales {
 					} catch(IOException e) {
 						System.out.println(UNKNOWN_ERROR);
 						return;
-					} catch (Exception e) {
-					    System.out.println(UNKNOWN_ERROR + e);
-					    return;
 					}
 				}
 			}
@@ -177,12 +174,6 @@ public class CalculateSales {
 			String line;
 			while((line = br.readLine()) != null) {
 
-				//1行に支店コードと支店名が「,」(カンマ)で区切られているか確認
-				if(!line.contains(",") ) {
-					System.out.println(FILE_INVALID_FORMAT);
-					return false;
-				}
-
 				//処理内容1-2
 				String[] items = line.split(",");
 
@@ -195,14 +186,12 @@ public class CalculateSales {
 				//処理内容1-2
 				branchNames.put(items[0], items[1]);
 				branchSales.put(items[0], 0L);
+
 			}
 		} catch(IOException e) {
 			System.out.println(UNKNOWN_ERROR);
 			return false;
-		}  catch (Exception e) {
-		    System.out.println(UNKNOWN_ERROR + e);
-		    return false;
-		}finally {
+		} finally {
 			// ファイルを開いている場合
 			if(br != null) {
 				try {
@@ -211,9 +200,6 @@ public class CalculateSales {
 				} catch(IOException e) {
 					System.out.println(UNKNOWN_ERROR);
 					return false;
-				} catch (Exception e) {
-				    System.out.println(UNKNOWN_ERROR + e);
-				    return false;
 				}
 			}
 		}
@@ -245,10 +231,7 @@ public class CalculateSales {
 		} catch(IOException e) {
 			System.out.println(UNKNOWN_ERROR);
 			return false;
-		}  catch (Exception e) {
-		    System.out.println(UNKNOWN_ERROR + e);
-		    return false;
-		}finally {
+		} finally {
 			// ファイルを開いている場合
 			if(bw != null) {
 				try {
@@ -257,9 +240,6 @@ public class CalculateSales {
 				} catch(IOException e) {
 					System.out.println(UNKNOWN_ERROR);
 					return false;
-				} catch (Exception e) {
-				    System.out.println(UNKNOWN_ERROR + e);
-				    return false;
 				}
 			}
 		}
